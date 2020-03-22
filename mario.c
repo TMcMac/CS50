@@ -1,35 +1,42 @@
+#include <cs50.h>
 #include <stdio.h>
 
 int main(void)
 {
-    int height; 
-    do {
-    printf("Please enter a number between 1 and 8.\n");
-    scanf("%d", &height);
-    } while ( height < 1 || height > 8);
-    
-    for (int r = 0 ; r<=height; r++)
+    char term;
+    int count = 0;
+    int i, space, hash, rows, tmp;
+
+    while (count < 1 || count > 8)
+    {
+        printf("Please enter a number between 1 and 8 (inclusive): \n");
+        if(scanf("%d%c", &tmp, &term) != 2 || term != '\n')
         {
-            for (int u = 8; u > r; u--)
+            printf("ERROR: you did not enter a number!\n");
+            return (-1);
+        }
+    }
+
+    space = count - 1;
+    hash = 1;
+    for (rows = 1; rows < count; rows++)
+        {
+            for (i = 0; i < space; i++)
             {
-            	printf(" ");
+                putchar(' ');
             }
-
-            for (int s = 0; s < r; s++)
+            for (i = 0; i < hash; i++)
             {
-                printf("#");
-                
+                putchar('#');
             }
-            
-            printf(" ");
-
-            for (int t = 0; t < r; t++)
+            putchar(' ');
+            for (i = 0; i < hash; i++)
             {
-            	printf("#");
+                putchar('#');
             }
-
-
-        printf("\n");
+            putchar('\n');
+            space--;
+            hash++;
         }
 
 }
