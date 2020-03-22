@@ -10,7 +10,8 @@ int main(void)
     while (count < 1 || count > 8)
     {
         printf("Please enter a number between 1 and 8 (inclusive): \n");
-        if(scanf("%d%c", &tmp, &term) != 2 || term != '\n')
+        tmp = scanf("%d%c", &count, &term);
+        if (tmp != 2 || term != '\n')
         {
             printf("ERROR: you did not enter a number!\n");
             return (-1);
@@ -19,24 +20,25 @@ int main(void)
 
     space = count - 1;
     hash = 1;
-    for (rows = 1; rows < count; rows++)
+    i = 0;
+    for (rows = 0; rows < count; rows++)//iterate till we hit the right number of rows
+    {
+        for (i = 0; i < space; i++)//leading spaces left side of pyramid
         {
-            for (i = 0; i < space; i++)
-            {
-                putchar(' ');
-            }
-            for (i = 0; i < hash; i++)
-            {
-                putchar('#');
-            }
             putchar(' ');
-            for (i = 0; i < hash; i++)
-            {
-                putchar('#');
-            }
-            putchar('\n');
-            space--;
-            hash++;
         }
-
+        for (i = 0; i < hash; i++)//left hashes
+        {
+            putchar('#');
+        }
+        putchar(' '); //gap between sides
+        putchar(' '); //gap between sides
+        for (i = 0; i < hash; i++)//right side of pyramid
+        {
+            putchar('#');
+        }
+        putchar('\n');
+        space--;
+        hash++;
+    }
 }
