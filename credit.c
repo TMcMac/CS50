@@ -1,95 +1,81 @@
 #include <stdio.h>
+#include <math.h>
+#include <cs50.h>
 
+int main(void)
+{
+    long CCnum, temp;
+    int breakup[16];
+    int firsttwo, i, count = 0, sum1 = 0, sum2 = 0;
 
-int main() {
-//Get the credit card number and store it is ccNum
-	long ccNum = printf("Please enter your credit card number:\n");
-    scanf("%ld", &ccNum);
+    CCnum = get_long("Please enter your credit card number: "); //get the crdtcrd num and validate is long
 
-//Validate that the number is between 13 and 16 digits
-    int digits = 0;
-    long validate = ccNum;
+    temp = CCnum; //I want to perserve CCnum in case I need it
 
-    while (validate > 0)
-	    {
-	        validate = validate / 10;
-	        digits++;
-	    };
-
-	if (digits != 13 && digits != 15 && digits !=16) 
-	{
-		printf("INVALID\n");
-	};
-
-//Validate the credit card using Luhn’s Algorithm
-
-	//this puts all the digits of ccNum in an array from the last digit to the first
-	long checksum = ccNum;
-	int count1 = digits;
-	int luhn[count1];
-		while (count1>0) {
-			luhn[count1] = checksum % 10;
-			checksum /= 10;
-			count1--;
-		};
-
-	
-
-	//This will preform the first check of Luhn's Algorithm (every other digit * 2 then add those digits together)
-
-	int m = digits;
-	int h = 1;
-	int sumOdd = 0;
-
-	while (h <= m) {
-		int x = (luhn[h] * 2);
-
-		if (x>=10) {
-			int y = (x/10);
-			int z = (x % 10);
-			sumOdd+= (y+z);
-		} else {
-			sumOdd += x;
-		};
-
-		h += 2;
-	};
-
-	//This will add the even digits together for part two of Luhn's algorithm
-
-	int n = digits;
-	int i = 2;
-	int sumEven = 0;
-	
-
-	while (i <= n) {
-		sumEven += luhn[i];
-		i += 2;
-	};
-
-	//Finally add our sumEven and sumOdd to do the final validation of Luhn's Algorithm
-	
-	int finalsum = ((sumOdd + sumEven) % 10);
-
-	if (finalsum != 0) {
-		printf("INVALID\n");
-	};
-
-//What type of card is it?
-	long ident = ccNum;
-
-	while (ident > 100) {
-		ident = ident / 100;
-	};
-
-	if (ident >= 51 && ident <= 57) {
-		printf("MASTERCARD\n");
-	} else if (ident >= 40 && ident <= 49) {
-		printf("VISA\n");
-	} else if (ident == 34 || ident == 37) {
-		printf("AMERICAN EXPRESS\n");
-	} else {
-		printf("INVALID\n");
-	};
+    while (temp >= 1)
+    {
+        temp /= 10;
+	count++; // This counts the number of digits
+    }
+    if (count != 13 && count != 15 && count != 16)
+    {
+        printf("INVALID\n"); // if it does have these digit counts it isnt valid
+        return (0);
+    }
+    temp = CCnum;
+    for (i = 0; i < count; i++)
+    {
+        if (temp >= 10)
+        {
+            breakup[i] = (temp % 10); //putting the ccnum in an array back to front
+            temp /= 10;
+        }
+        else
+        {
+            breakup[i] = temp; 
+            // last (first) digit of ccnum
+        }
+    }
     
+    //Starting Luhn's algo
+    for (i = 0; i < count; i++)
+    {
+        if (i == 0 || i % 2 == 0)
+        {
+            sum1 += breakup[i]; //my array has ccnum backwards of array[0] is last digit
+        }
+        else
+        {
+            sum2 += (((breakup[i] * 2) / 10) + ((breakup[i] * 2) % 10));
+            // any odd position in the array this way needs to be doubled 
+            //and then its digits summed together
+        }
+    }
+    if ((sum1 + sum2) % 10 != 0)
+      
+    {
+        printf("INVALID\n"); // if our sum does not end in 0 it is invalid
+        return (0);
+    }
+    else
+    {
+        firsttwo = ((breakup[count - 1] * 10) + (breakup[count - 2]));
+        if (count == 15 && (firsttwo == 34 || firsttwo == 37))
+        {
+            printf("AMEX\n"); // AMEX is 15 digits and starts with 34 or 37
+        }
+        else if ((count == 13 || count == 16) && (firsttwo / 10 == 4))
+        {
+            printf("VISA\n"); // VISA is 13 or 16 digits and starts with 4
+        }
+        else if (count == 16 && (firsttwo > 50 && firsttwo < 56))
+        {
+            printf("MASTERCARD\n"); // MC is 16 digits and starts with 51 to 55
+        }
+        else
+        {
+            printf("INVALID\n");
+        }
+    }
+    return (0);
 }

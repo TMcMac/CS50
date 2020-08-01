@@ -7,15 +7,11 @@ int main(void)
     int count = 0;
     int i, space, hash, rows, tmp;
 
+
     while (count < 1 || count > 8)
     {
-        printf("Please enter a number between 1 and 8 (inclusive): \n");
-        tmp = scanf("%d%c", &count, &term);
-        if (tmp != 2 || term != '\n')
-        {
-            printf("ERROR: you did not enter a number!\n");
-            return (-1);
-        }
+        count = get_int("Please enter a number between 1 and 8 (inclusive): \n");
+
     }
 
     space = count - 1;
