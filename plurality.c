@@ -84,10 +84,8 @@ bool vote(string name)
 // Print the winner (or winners) of the election
 void print_winner(void)
 {
-    string winners[MAX];
-    int i, j, lead;
+    int i, lead;
     lead = 0;
-    j = 0;
 
     // First go through and find the max vote total
     for (i = 0; candidates[i].name != '\0'; i++)
@@ -98,20 +96,13 @@ void print_winner(void)
         }
     }
 
-    // Any candidate with the max vote total gets added to winners array
+    // Any candidate with the max vote total is a winner so print
     for (i = 0; candidates[i].name != '\0'; i++)
     {
         if (candidates[i].votes == lead)
         {
-            winners[j] = candidates[i].name;
-            j++;
+            printf("%s\n", candidates[i].name)
         }
-    }
-
-    // Print the winners array to display winners of the election
-    for (i = 0; winners[i] != '\0'; i++)
-    {
-        printf("%s\n", winners[i]);
     }
 
     return;
